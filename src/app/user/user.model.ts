@@ -1,4 +1,4 @@
-import { Task } from "../task/task.model.ts";
+import { Task } from "../../task/task.model";
 
 // src/user/user.model.ts
 export interface User {
