@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../../../user/user.service';
@@ -9,6 +9,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { HttpClient } from '@angular/common/http';
+import { Task } from '../../../../task/task.model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-task-details',
@@ -65,11 +68,27 @@ import { MatTooltipModule } from '@angular/material/tooltip';
               [disabled]="task.completed"
               matTooltip="Click to complete task"
               color="accent"
+              (click)="updteTaskStatus(task)"
             >
               <mat-icon aria-label="Edit">done_all</mat-icon>
             </button>
           </td>
         </ng-container>
+
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef>Delete Task</th>
+          <td mat-cell *matCellDef="let task">
+            <button
+              mat-icon-button
+              (click)="deleteTask(task.id)"
+              matTooltip="Click to delete task"
+              color="warn"
+            >
+              <mat-icon aria-label="Delete">delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
 
         <tr mat-header-row *matHeaderRowDef="fullColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: fullColumns"></tr>
@@ -121,7 +140,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 export class TaskDetailsComponent implements OnInit {
   public displayedColumns = ['id', 'name', 'description', 'completed'];
 
-  public fullColumns = [...this.displayedColumns, 'status'];
+  public fullColumns = [...this.displayedColumns, 'status', 'delete'];
 
   public selecterUserId!: number;
 
@@ -131,7 +150,13 @@ export class TaskDetailsComponent implements OnInit {
 
   public route = inject(ActivatedRoute);
 
+  public tasksUrl = 'http://localhost:3000/tasks';
+
   public router = inject(Router);
+
+  public http = inject(HttpClient);
+
+  public destroyRef = inject(DestroyRef);
 
   public userTasks = this.taskService.userTasks;
 
@@ -145,4 +170,37 @@ export class TaskDetailsComponent implements OnInit {
     }
 
   }
+
+  public updteTaskStatus(task: Task): void {
+
+    const completedTask = {
+      ...task,
+      completed: true,
+    };
+
+    this.http
+      .put(this.tasksUrl + '/' + task.id, completedTask)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.userTasks.update((tasks) =>
+            tasks.map((_task) => (_task.id === task.id ? completedTask : _task))
+          );
+        },
+        //! Error handling
+      });
+  }
+  public deleteTask(taskId: number): void {
+    this.http
+      .delete(this.tasksUrl + '/' + taskId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.taskService.userTasks.update((tasks) =>
+            tasks.filter((task) => task.id !== taskId)
+          );
+        },
+        //! Error handling
+      });
+  }  
 }
