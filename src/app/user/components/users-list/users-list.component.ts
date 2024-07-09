@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-users-list',
@@ -13,7 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
   template: `
     <section class="container" *ngIf="users().length">
       <div class="container__header">
-        <span>Users</span>
+      <span>Users ({{totalUsersCount()}})</span>
       </div>
       <table mat-table [dataSource]="users()" class="mat-elevation-z8">
         <ng-container
@@ -26,7 +27,11 @@ import { HttpClientModule } from '@angular/common/http';
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef>Tarefas</th>
           <td mat-cell *matCellDef="let user">
-            <button mat-icon-button color="accent">
+            <button
+              mat-icon-button
+              color="accent"
+              (click)="setSelectedUserId(user.id)"
+            >
               <mat-icon>search</mat-icon>
             </button>
           </td>
@@ -73,6 +78,16 @@ export class UsersListComponent {
   public fullColumns = ['id', 'name', 'email', 'gender', 'action'];
 
   public userService = inject(UserService);
+  
+  public router = inject(Router);
 
   public users = this.userService.users;
+
+  public totalUsersCount = this.userService.totalUsersCount;
+
+  public setSelectedUserId(id: number): void {
+    this.userService.setSelectedUserId(id);
+
+    this.router.navigateByUrl(`tasks/${id}`);
+  }
 }
