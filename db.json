@@ -27,6 +27,12 @@
       "description": "Não deixar a resistência perder a motivação na luta contra o império",
       "userId": 2,
       "completed": false
+    },
+    {
+      "id": "87c2",
+      "name": "New task",
+      "description": "New task description",
+      "completed": true
     }
   ]
 }

@@ -30,8 +30,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   
   template: `
  <section class="container">
-      <div class="container__header">
+ <div class="container__header">
         <span>Tasks</span>
+        <button mat-fab color="accent" (click)="addNewTask()">
+          <mat-icon>add_circle</mat-icon>
+        </button>
       </div>
 
       <table mat-table [dataSource]="userTasks()" class="mat-elevation-z8">
@@ -203,4 +206,23 @@ export class TaskDetailsComponent implements OnInit {
         //! Error handling
       });
   }  
+
+  public addNewTask(): void {
+    const newTask  = {
+      name: "New task",
+      description: "New task description",
+      completed: false
+    }
+
+    this.http
+      .post(this.tasksUrl, newTask)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          const responseTaks = response as Task;
+          this.userTasks.update((task) => [...task, responseTaks]);
+        },
+        //! Error handling
+      });
+  }
 }
