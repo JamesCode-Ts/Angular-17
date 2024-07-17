@@ -106,10 +106,19 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   `,
   styles: [
     `
-      th,
+     th,
       td {
         text-align: center;
+        color: var(--white);
       }
+       
+    table{
+      
+    background-color: var(--black);
+   
+    
+     }
+
       .container {
         padding: 2rem 10rem;
         gap: 2rem;

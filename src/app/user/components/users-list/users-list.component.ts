@@ -44,31 +44,42 @@ import { Router } from '@angular/router';
   `,
   styles: [
     `
+
       th,
       td {
         text-align: center;
+        color: var(--white);
       }
+       
+    table{
+    background-color: var(--black);
+    
+     
+     }
 
-      .container {
-        padding: 2rem 10rem;
-        gap: 2rem;
+     .container {
+  padding: 5rem 10rem;
+  gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-        display: flex;
-        flex-direction: column;
-        align-items: center;
 
-        &__header {
-          > span {
-            font-size: 2rem;
-            line-heith: 1rem;
-          }
-          width: 100%;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          text-align: center;
-        }
-      }
+
+.container__header {
+  width: 100%; /* Ajuste conforme necessário */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+.container__header > span {
+  font-size: 2rem;
+  line-height: 1rem; /* Corrigido "line-heith" para "line-height" */
+}
+
     `,
   ],
 })

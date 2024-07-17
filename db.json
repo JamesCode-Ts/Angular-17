@@ -15,13 +15,6 @@
   ],
   "tasks": [
     {
-      "id": "2",
-      "name": "Desafiar Darth Vader",
-      "description": "Enfrentar Darth Vader e derrota-lo",
-      "userId": 1,
-      "completed": true
-    },
-    {
       "id": "3",
       "name": "Motivar resistência",
       "description": "Não deixar a resistência perder a motivação na luta contra o império",
@@ -29,10 +22,28 @@
       "completed": false
     },
     {
-      "id": "87c2",
+      "id": "4db9",
       "name": "New task",
       "description": "New task description",
-      "completed": true
+      "completed": false
+    },
+    {
+      "id": "eeab",
+      "name": "New task",
+      "description": "New task description",
+      "completed": false
+    },
+    {
+      "id": "51fc",
+      "name": "New task",
+      "description": "New task description",
+      "completed": false
+    },
+    {
+      "id": "d169",
+      "name": "New task",
+      "description": "New task description",
+      "completed": false
     }
   ]
 }
